@@ -1,0 +1,47 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  php:
+    build: php7
+    image: cffycls/php
+    container_name: p1
+    networks:
+      mybridge:
+        ipv4_address: 172.1.1.11
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./php7/etc:/usr/local/php/etc
+    restart: on-failure
+
+  php-node:
+    build: php_node
+    image: cffycls/pn
+    container_name: pn
+    networks:
+      mybridge:
+        ipv4_address: 172.1.2.11
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "./php_node/etc:/usr/local/php/etc"
+    restart: on-failure
+
+  redis:
+    build: redis
+    image: cffycls/redis
+    container_name: r1
+    networks:
+      mybridge:
+        ipv4_address: 172.1.3.11
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "./redis/redis.conf:/etc/redis/redis.conf"
+      - "./redis/sentinel.conf:/etc/redis/sentinel.conf"
+      - "./redis/data:/data"
+    restart: on-failure
+
+networks:
+  mybridge:
+    name: mybridge
+    ipam:
+      config:
+        - subnet: 172.1.0.0/16
+          gateway: 172.1.0.1
