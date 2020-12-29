@@ -51,10 +51,10 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
        		libevent-dev \
        		rabbitmq-c-dev \
             pcre2-dev \
-## oniguruma: 安装php7.4的过程中，mbstring的正则表达式处理功能对这个包有依赖性
             oniguruma \
             oniguruma-dev \
        		" \
+## oniguruma: 安装php7.4的过程中，mbstring的正则表达式处理功能对这个包有依赖性
     && apk add --no-cache \
         curl \
         tar \

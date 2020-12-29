@@ -9,7 +9,8 @@ MAINTAINER cffycls@foxmail.com
 
 # dependencies required for running "phpize" 2020.4.10组件更新
 ENV PHP_VERSION 7.4.13
-PHPIZE_DEPS="\
+ADD packages /tmp/
+ENV PHPIZE_DEPS "\
             autoconf \
             dpkg-dev dpkg \
             file \
@@ -29,8 +30,6 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     && mkdir -p "/usr/local/etc/php/conf.d" && mkdir -p "/var/www/html" \
     && chown www-data:www-data /var/www/html && chmod 777 /var/www/html \
     \
-    #编译工具
-    &&
     #安装依赖
     && PHP_DEVS="\
        		argon2-dev \
@@ -49,10 +48,10 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
        		libevent-dev \
        		rabbitmq-c-dev \
             pcre2-dev \
-## oniguruma: 安装php7.4的过程中，mbstring的正则表达式处理功能对这个包有依赖性
             oniguruma \
             oniguruma-dev \
        		" \
+## oniguruma: 安装php7.4的过程中，mbstring的正则表达式处理功能对这个包有依赖性
     && apk add --no-cache \
         curl \
         tar \
@@ -136,7 +135,6 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     make && make install && \
     cd ../ && rm -rf swoole \
 	\
-	\
     #uuid 1.0.4 (libuuid-1.0.3)
     && \
     mkdir -p ~/build/libuuid && cd ~/build/libuuid && \
@@ -158,6 +156,15 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
 
 ENV NODE_VERSION 15.5.0
+ENV BUILD_NODE_DEPS '\
+     binutils-gold \
+     g++ \
+     gcc \
+     gnupg \
+     libgcc \
+     linux-headers \
+     make \
+     python3'
 RUN addgroup -g 1000 node \
     && adduser -u 1000 -G node -s /bin/sh -D node \
     \
@@ -166,14 +173,7 @@ RUN addgroup -g 1000 node \
         libstdc++ \
     && echo "Building from source" \
     # backup build
-    && apk add --no-cache --virtual BUILD_NODE_DEPS \
-        binutils-gold \
-        g++ \
-        gcc \
-        libgcc \
-        linux-headers \
-        make \
-        python3 \
+    && apk add --no-cache $BUILD_NODE_DEPS \
     && for key in \
       4ED778F539E3634C779C87C6D7062848A1AB005C \
       94AE36675C464D64BAFA68DD7434390BDBE9B9C5 \
