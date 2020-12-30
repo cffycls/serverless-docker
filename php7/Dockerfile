@@ -164,5 +164,6 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     && apk del $PHPIZE_DEPS curl tar xz openssl wget \
     && php -m
 
-CMD ["php", "-a"]
+CMD ["php-fpm"]
+# CMD ["php", "-a"]
 # docker build -t cffycls/php:latest .

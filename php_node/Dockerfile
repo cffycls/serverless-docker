@@ -112,13 +112,9 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     && make install \
     && rm -rf /tmp/pear ~/.pearrc \
     && cd ../ && rm -rf php \
-    #--enable-maintainer-zts \ #pthreads报错不用
 	\
 #======================================================================================================
-    \
-#======================================================================================================
 #测试 -- 需要对话参数，所以自定义安装
-    \
     \
 	# swoole
     && \
@@ -131,7 +127,6 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 		--enable-http2  \
 		--enable-sockets \
 		&& \
-	\
     make && make install && \
     cd ../ && rm -rf swoole \
 	\
@@ -142,8 +137,6 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     ./configure --prefix=/usr && \
     make && make install && \
     cd ../ && rm -rf libuuid \
-    \
-#======================================================================================================
     \
 #======================================================================================================
     \
@@ -220,5 +213,6 @@ RUN curl -fsSLO --compressed "https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v
   && yarn --version
 
 RUN apk del $PHPIZE_DEPS $BUILD_NODE_DEPS
-CMD ["php", "-a"]
-CMD [ "node" ]
+CMD ["php-fpm"]
+# CMD ["php", "-a"]
+#CMD [ "node" ]
