@@ -1,0 +1,33 @@
+Vagrant.configure("2") do |config|
+    config.vm.provision "shell", inline: <<-SHELL
+        echo "机器集群"
+    SHELL
+    
+    config.vm.define "mechine1"  do |node1|
+        node1.vm.hostname="node1"
+        node1.vm.box = "debian10"
+        node1.vm.network:public_network, ip: "192.168.1.121"
+        node1.vm.provider "virtualbox" do | m |
+            m.memory=4096
+            m.cpus=2
+        end
+    end
+    config.vm.define "mechine2" do |node2|
+        node2.vm.hostname="node2"
+        node2.vm.box = "debian10"
+        node2.vm.network:public_network, ip: "192.168.1.122"
+        node2.vm.provider "virtualbox" do | m |
+            m.memory=4096
+            m.cpus=2
+        end
+    end
+    config.vm.define "mechine3" do |node3|
+        node3.vm.hostname="node3"
+        node3.vm.box = "debian10"
+        node3.vm.network:public_network, ip: "192.168.1.123"
+        node3.vm.provider "virtualbox" do | m |
+            m.memory=4096
+            m.cpus=2
+        end
+    end
+end
